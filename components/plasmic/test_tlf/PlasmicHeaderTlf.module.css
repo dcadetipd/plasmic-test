@@ -1,0 +1,111 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: auto;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 0;
+}
+.navigationBar:global(.__wab_instance) {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+  padding: 0px;
+}
+.link__oWgV {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0px;
+}
+.img__zgvbA {
+  object-fit: cover;
+  height: 40px;
+}
+.img__zgvbA > picture > img {
+  object-fit: cover;
+}
+.text__zu0RZ {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  color: var(--token-b54tAmlgUaXe);
+  font-family: "Arial Black";
+  transition-property: all;
+  transition-duration: 1s;
+  min-width: 0;
+  -webkit-transition-property: all;
+  -webkit-transition-duration: 1s;
+  padding: 0px 0px 0px 5px;
+}
+.text__cHlHw {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  font-size: 12px;
+  color: var(--token-RvPI6LyeIPmd);
+  font-weight: 500;
+  border-left-width: 1px;
+  border-left-style: solid;
+  padding-left: 15px;
+  min-width: 0;
+}
+.img__goZPo {
+  object-fit: cover;
+}
+.img__goZPo > picture > img {
+  object-fit: cover;
+}
+.img___4C1P {
+  object-fit: cover;
+}
+.img___4C1P > picture > img {
+  object-fit: cover;
+}
+.freeBox___93Bv0 {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px;
+}
+.freeBox__uLg8T {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  background: #000000;
+  min-width: 0;
+  padding: 8px;
+}
+.link__aWFgy {
+  position: relative;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  color: var(--token-Pxe4wDL2kJpb);
+}
