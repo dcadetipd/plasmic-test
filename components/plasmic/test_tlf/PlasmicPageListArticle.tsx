@@ -59,17 +59,11 @@ import {
   useGlobalActions
 } from "@plasmicapp/react-web/lib/host";
 
-import {
-  executePlasmicDataOp,
-  usePlasmicDataOp,
-  usePlasmicInvalidate
-} from "@plasmicapp/react-web/lib/data-sources";
-
 import HeaderTlf from "../../HeaderTlf"; // plasmic-import: rODFX2DMa7hT/component
+import { GraphqlFetcher } from "@plasmicpkgs/plasmic-query";
 import { AntdRadioGroup } from "@plasmicpkgs/antd5/skinny/registerRadio";
 import { AntdRadio } from "@plasmicpkgs/antd5/skinny/registerRadio";
 import FooterTlf from "../../FooterTlf"; // plasmic-import: foCChc10Jrov/component
-import { Fetcher } from "@plasmicapp/react-web/lib/data-sources";
 
 import { useScreenVariants as useScreenVariantswycoMwNnQBim } from "./PlasmicGlobalVariant__Screen"; // plasmic-import: wycoMWNnQBim/globalVariant
 
@@ -96,7 +90,8 @@ export type PlasmicPageListArticle__OverridesType = {
   pageListeArticle?: Flex__<"div">;
   headerTlf?: Flex__<typeof HeaderTlf>;
   articles?: Flex__<"h1">;
-  articleList?: Flex__<"div">;
+  articlesFetcher?: Flex__<typeof GraphqlFetcher>;
+  freeBox?: Flex__<"div">;
   columns?: Flex__<"div">;
   img?: Flex__<typeof PlasmicImg__>;
   h4?: Flex__<"h4">;
@@ -136,9 +131,6 @@ function PlasmicPageListArticle__RenderFunc(props: {
   const refsRef = React.useRef({});
   const $refs = refsRef.current;
 
-  let [$queries, setDollarQueries] = React.useState<
-    Record<string, ReturnType<typeof usePlasmicDataOp>>
-  >({});
   const stateSpecs: Parameters<typeof useDollarState>[0] = React.useMemo(
     () => [
       {
@@ -153,29 +145,9 @@ function PlasmicPageListArticle__RenderFunc(props: {
   const $state = useDollarState(stateSpecs, {
     $props,
     $ctx,
-    $queries: $queries,
+    $queries: {},
     $refs
   });
-
-  const new$Queries: Record<string, ReturnType<typeof usePlasmicDataOp>> = {
-    queryArticles: usePlasmicDataOp(() => {
-      return {
-        sourceId: "gHZEuCcJWtgYMHmdhTMHRN",
-        opId: "e7860bf4-ba88-49d8-8d24-bddd5993b7ab",
-        userArgs: {
-          variables: [parseInt($ctx.params.page), 5]
-        },
-        cacheKey: `plasmic.$.e7860bf4-ba88-49d8-8d24-bddd5993b7ab.$.`,
-        invalidatedKeys: null,
-        roleId: null
-      };
-    })
-  };
-  if (Object.keys(new$Queries).some(k => new$Queries[k] !== $queries[k])) {
-    setDollarQueries(new$Queries);
-
-    $queries = new$Queries;
-  }
 
   const globalVariants = ensureGlobalVariants({
     screen: useScreenVariantswycoMwNnQBim()
@@ -237,12 +209,26 @@ function PlasmicPageListArticle__RenderFunc(props: {
               sty.articles
             )}
           >
-            {"Articles"}
+            <React.Fragment>
+              {(() => {
+                try {
+                  return "Article - Page " + $ctx.params.page;
+                } catch (e) {
+                  if (
+                    e instanceof TypeError ||
+                    e?.plasmicType === "PlasmicUndefinedDataError"
+                  ) {
+                    return "Articles";
+                  }
+                  throw e;
+                }
+              })()}
+            </React.Fragment>
           </h1>
           {(_par => (!_par ? [] : Array.isArray(_par) ? _par : [_par]))(
             (() => {
               try {
-                return $queries.queryArticles.data.response.data.editos.data;
+                return [1];
               } catch (e) {
                 if (
                   e instanceof TypeError ||
@@ -257,179 +243,257 @@ function PlasmicPageListArticle__RenderFunc(props: {
             const currentItem = __plasmic_item_0;
             const currentIndex = __plasmic_idx_0;
             return (
-              <div
-                data-plasmic-name={"articleList"}
-                data-plasmic-override={overrides.articleList}
-                className={classNames(projectcss.all, sty.articleList)}
-                id={``}
-                key={currentIndex}
-                onClick={async event => {
-                  const $steps = {};
-
-                  $steps["goToPage"] = true
-                    ? (() => {
-                        const actionArgs = {
-                          destination: (() => {
-                            try {
-                              return "/article/" + currentItem.slug;
-                            } catch (e) {
-                              if (
-                                e instanceof TypeError ||
-                                e?.plasmicType === "PlasmicUndefinedDataError"
-                              ) {
-                                return "";
-                              }
-                              throw e;
-                            }
-                          })()
-                        };
-                        return (({ destination }) => {
-                          if (
-                            typeof destination === "string" &&
-                            destination.startsWith("#")
-                          ) {
-                            document
-                              .getElementById(destination.substr(1))
-                              .scrollIntoView({ behavior: "smooth" });
-                          } else {
-                            __nextRouter?.push(destination);
-                          }
-                        })?.apply(null, [actionArgs]);
-                      })()
-                    : undefined;
-                  if (
-                    $steps["goToPage"] != null &&
-                    typeof $steps["goToPage"] === "object" &&
-                    typeof $steps["goToPage"].then === "function"
-                  ) {
-                    $steps["goToPage"] = await $steps["goToPage"];
-                  }
+              <GraphqlFetcher
+                data-plasmic-name={"articlesFetcher"}
+                data-plasmic-override={overrides.articlesFetcher}
+                className={classNames("__wab_instance", sty.articlesFetcher)}
+                dataName={"fetchedData"}
+                errorDisplay={
+                  <DataCtxReader__>
+                    {$ctx => "Error fetching data"}
+                  </DataCtxReader__>
+                }
+                errorName={"fetchError"}
+                headers={{
+                  "Content-Type": "application/json",
+                  Accept: "application/json"
                 }}
-                title={``}
+                key={currentIndex}
+                loadingDisplay={
+                  <DataCtxReader__>{$ctx => "Loading..."}</DataCtxReader__>
+                }
+                method={"POST"}
+                noLayout={false}
+                previewSpinner={false}
+                query={{
+                  query:
+                    'query MyQuery($pageSize: Int = 5, $page: Int = 1, $sort: String = "publishedAt dsc") {\n  editos(filters: {pageSize: $pageSize, page: $page, sort: $sort}) {\n    data {\n      title\n      slug\n      dates {\n        publishedAt\n        updatedAt\n      }\n      intro_listing\n      cover {\n        data {\n          alternativeText\n          url\n        }\n      }\n    }\n    pagination {\n      page\n      pageCount\n      total\n      pageSize\n    }\n  }\n}\n',
+                  variables: { page: 1, pageSize: 5, sort: "publishedAt" }
+                }}
+                url={"https://graphql.production.pointfranchise.co.uk/"}
+                varOverrides={(() => {
+                  try {
+                    return {
+                      page: parseInt($ctx.params.page),
+                      pageSize: 5,
+                      sort: "publishedAt"
+                    };
+                  } catch (e) {
+                    if (
+                      e instanceof TypeError ||
+                      e?.plasmicType === "PlasmicUndefinedDataError"
+                    ) {
+                      return {};
+                    }
+                    throw e;
+                  }
+                })()}
               >
-                <div
-                  data-plasmic-name={"columns"}
-                  data-plasmic-override={overrides.columns}
-                  className={classNames(projectcss.all, sty.columns)}
-                >
-                  <div
-                    className={classNames(projectcss.all, sty.column__s6Lkd)}
-                  >
-                    <PlasmicImg__
-                      data-plasmic-name={"img"}
-                      data-plasmic-override={overrides.img}
-                      alt={""}
-                      className={classNames(sty.img)}
-                      displayHeight={"200px"}
-                      displayMaxHeight={"none"}
-                      displayMaxWidth={"200px"}
-                      displayMinHeight={"0"}
-                      displayMinWidth={"0"}
-                      displayWidth={"200px"}
-                      height={
-                        hasVariant(globalVariants, "screen", "mobileOnly")
-                          ? "200px"
-                          : ``
-                      }
-                      loading={"lazy"}
-                      src={(() => {
+                <DataCtxReader__>
+                  {$ctx =>
+                    (_par =>
+                      !_par ? [] : Array.isArray(_par) ? _par : [_par])(
+                      (() => {
                         try {
-                          return currentItem.cover.data.url;
+                          return $ctx.fetchedData.data.editos.data;
                         } catch (e) {
                           if (
                             e instanceof TypeError ||
                             e?.plasmicType === "PlasmicUndefinedDataError"
                           ) {
-                            return undefined;
+                            return [];
                           }
                           throw e;
                         }
-                      })()}
-                      width={
-                        hasVariant(globalVariants, "screen", "mobileOnly")
-                          ? "200px"
-                          : ``
-                      }
-                    />
-                  </div>
-                  <div
-                    className={classNames(projectcss.all, sty.column__lkhJp)}
-                  >
-                    <h4
-                      data-plasmic-name={"h4"}
-                      data-plasmic-override={overrides.h4}
-                      className={classNames(
-                        projectcss.all,
-                        projectcss.h4,
-                        projectcss.__wab_text,
-                        sty.h4
-                      )}
-                    >
-                      <React.Fragment>
-                        {(() => {
-                          try {
-                            return currentItem.title;
-                          } catch (e) {
-                            if (
-                              e instanceof TypeError ||
-                              e?.plasmicType === "PlasmicUndefinedDataError"
-                            ) {
-                              return "";
-                            }
-                            throw e;
-                          }
-                        })()}
-                      </React.Fragment>
-                    </h4>
-                    <div
-                      className={classNames(
-                        projectcss.all,
-                        projectcss.__wab_text,
-                        sty.text__ikka0
-                      )}
-                    >
-                      <React.Fragment>
-                        {(() => {
-                          try {
-                            return currentItem.dates.publishedAt;
-                          } catch (e) {
-                            if (
-                              e instanceof TypeError ||
-                              e?.plasmicType === "PlasmicUndefinedDataError"
-                            ) {
-                              return "";
-                            }
-                            throw e;
-                          }
-                        })()}
-                      </React.Fragment>
-                    </div>
-                    <div
-                      className={classNames(
-                        projectcss.all,
-                        projectcss.__wab_text,
-                        sty.text___1Cxf
-                      )}
-                    >
-                      <React.Fragment>
-                        {(() => {
-                          try {
-                            return currentItem.intro_listing;
-                          } catch (e) {
-                            if (
-                              e instanceof TypeError ||
-                              e?.plasmicType === "PlasmicUndefinedDataError"
-                            ) {
-                              return "";
-                            }
-                            throw e;
-                          }
-                        })()}
-                      </React.Fragment>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                      })()
+                    ).map((__plasmic_item_1, __plasmic_idx_1) => {
+                      const currentItem = __plasmic_item_1;
+                      const currentIndex = __plasmic_idx_1;
+                      return (
+                        <div
+                          data-plasmic-name={"freeBox"}
+                          data-plasmic-override={overrides.freeBox}
+                          className={classNames(projectcss.all, sty.freeBox)}
+                          key={currentIndex}
+                        >
+                          <div
+                            data-plasmic-name={"columns"}
+                            data-plasmic-override={overrides.columns}
+                            className={classNames(projectcss.all, sty.columns)}
+                          >
+                            <div
+                              className={classNames(
+                                projectcss.all,
+                                sty.column___80MTs
+                              )}
+                            >
+                              <PlasmicImg__
+                                data-plasmic-name={"img"}
+                                data-plasmic-override={overrides.img}
+                                alt={""}
+                                className={classNames(sty.img)}
+                                displayHeight={
+                                  hasVariant(
+                                    globalVariants,
+                                    "screen",
+                                    "mobileOnly"
+                                  )
+                                    ? "100%"
+                                    : "200px"
+                                }
+                                displayMaxHeight={
+                                  hasVariant(
+                                    globalVariants,
+                                    "screen",
+                                    "mobileOnly"
+                                  )
+                                    ? "200px"
+                                    : "none"
+                                }
+                                displayMaxWidth={
+                                  hasVariant(
+                                    globalVariants,
+                                    "screen",
+                                    "mobileOnly"
+                                  )
+                                    ? "100%"
+                                    : "200px"
+                                }
+                                displayMinHeight={"0"}
+                                displayMinWidth={"0"}
+                                displayWidth={
+                                  hasVariant(
+                                    globalVariants,
+                                    "screen",
+                                    "mobileOnly"
+                                  )
+                                    ? "100%"
+                                    : "200px"
+                                }
+                                height={
+                                  hasVariant(
+                                    globalVariants,
+                                    "screen",
+                                    "mobileOnly"
+                                  )
+                                    ? "200px"
+                                    : ``
+                                }
+                                loading={"lazy"}
+                                src={(() => {
+                                  try {
+                                    return currentItem.cover.data.url;
+                                  } catch (e) {
+                                    if (
+                                      e instanceof TypeError ||
+                                      e?.plasmicType ===
+                                        "PlasmicUndefinedDataError"
+                                    ) {
+                                      return undefined;
+                                    }
+                                    throw e;
+                                  }
+                                })()}
+                                width={
+                                  hasVariant(
+                                    globalVariants,
+                                    "screen",
+                                    "mobileOnly"
+                                  )
+                                    ? "100%"
+                                    : ``
+                                }
+                              />
+                            </div>
+                            <div
+                              className={classNames(
+                                projectcss.all,
+                                sty.column___5OAng
+                              )}
+                            >
+                              <h4
+                                data-plasmic-name={"h4"}
+                                data-plasmic-override={overrides.h4}
+                                className={classNames(
+                                  projectcss.all,
+                                  projectcss.h4,
+                                  projectcss.__wab_text,
+                                  sty.h4
+                                )}
+                              >
+                                <React.Fragment>
+                                  {(() => {
+                                    try {
+                                      return currentItem.title;
+                                    } catch (e) {
+                                      if (
+                                        e instanceof TypeError ||
+                                        e?.plasmicType ===
+                                          "PlasmicUndefinedDataError"
+                                      ) {
+                                        return "";
+                                      }
+                                      throw e;
+                                    }
+                                  })()}
+                                </React.Fragment>
+                              </h4>
+                              <div
+                                className={classNames(
+                                  projectcss.all,
+                                  projectcss.__wab_text,
+                                  sty.text__ikka0
+                                )}
+                              >
+                                <React.Fragment>
+                                  {(() => {
+                                    try {
+                                      return currentItem.dates.publishedAt;
+                                    } catch (e) {
+                                      if (
+                                        e instanceof TypeError ||
+                                        e?.plasmicType ===
+                                          "PlasmicUndefinedDataError"
+                                      ) {
+                                        return "";
+                                      }
+                                      throw e;
+                                    }
+                                  })()}
+                                </React.Fragment>
+                              </div>
+                              <div
+                                className={classNames(
+                                  projectcss.all,
+                                  projectcss.__wab_text,
+                                  sty.text___1Cxf
+                                )}
+                              >
+                                <React.Fragment>
+                                  {(() => {
+                                    try {
+                                      return currentItem.intro_listing;
+                                    } catch (e) {
+                                      if (
+                                        e instanceof TypeError ||
+                                        e?.plasmicType ===
+                                          "PlasmicUndefinedDataError"
+                                      ) {
+                                        return "";
+                                      }
+                                      throw e;
+                                    }
+                                  })()}
+                                </React.Fragment>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  }
+                </DataCtxReader__>
+              </GraphqlFetcher>
             );
           })}
           <AntdRadioGroup
@@ -449,12 +513,8 @@ function PlasmicPageListArticle__RenderFunc(props: {
                 try {
                   return (() => {
                     let first = 1;
-                    let last =
-                      $queries.queryArticles.data.response.data.editos
-                        .pagination.pageCount;
-                    let current =
-                      $queries.queryArticles.data.response.data.editos
-                        .pagination.page;
+                    let last = $ctx.fetchData.data.editos.pagination.pageCount;
+                    let current = $ctx.fetchData.data.editos.pagination.page;
                     let spread = 3;
                     return [
                       {
@@ -511,8 +571,7 @@ function PlasmicPageListArticle__RenderFunc(props: {
                     try {
                       return (
                         currentPaginationItem.page ==
-                        $queries.queryArticles.data.response.data.editos
-                          .pagination.page
+                        $ctx.fetchData.data.editos.pagination.page
                       );
                     } catch (e) {
                       if (
@@ -613,7 +672,8 @@ const PlasmicDescendants = {
     "pageListeArticle",
     "headerTlf",
     "articles",
-    "articleList",
+    "articlesFetcher",
+    "freeBox",
     "columns",
     "img",
     "h4",
@@ -623,7 +683,8 @@ const PlasmicDescendants = {
   ],
   headerTlf: ["headerTlf"],
   articles: ["articles"],
-  articleList: ["articleList", "columns", "img", "h4"],
+  articlesFetcher: ["articlesFetcher", "freeBox", "columns", "img", "h4"],
+  freeBox: ["freeBox", "columns", "img", "h4"],
   columns: ["columns", "img", "h4"],
   img: ["img"],
   h4: ["h4"],
@@ -638,7 +699,8 @@ type NodeDefaultElementType = {
   pageListeArticle: "div";
   headerTlf: typeof HeaderTlf;
   articles: "h1";
-  articleList: "div";
+  articlesFetcher: typeof GraphqlFetcher;
+  freeBox: "div";
   columns: "div";
   img: typeof PlasmicImg__;
   h4: "h4";
@@ -709,7 +771,8 @@ export const PlasmicPageListArticle = Object.assign(
     // Helper components rendering sub-elements
     headerTlf: makeNodeComponent("headerTlf"),
     articles: makeNodeComponent("articles"),
-    articleList: makeNodeComponent("articleList"),
+    articlesFetcher: makeNodeComponent("articlesFetcher"),
+    freeBox: makeNodeComponent("freeBox"),
     columns: makeNodeComponent("columns"),
     img: makeNodeComponent("img"),
     h4: makeNodeComponent("h4"),
