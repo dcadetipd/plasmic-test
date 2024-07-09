@@ -62,12 +62,8 @@ import {
 import { GraphqlFetcher } from "@plasmicpkgs/plasmic-query";
 import { FormWrapper } from "@plasmicpkgs/antd5/skinny/Form";
 import { formHelpers as FormWrapper_Helpers } from "@plasmicpkgs/antd5/skinny/Form";
-import { FormItemWrapper } from "@plasmicpkgs/antd5/skinny/FormItem";
-import { AntdInput } from "@plasmicpkgs/antd5/skinny/registerInput";
-import { inputHelpers as AntdInput_Helpers } from "@plasmicpkgs/antd5/skinny/registerInput";
-import { AntdTextArea } from "@plasmicpkgs/antd5/skinny/registerInput";
-import { inputHelpers as AntdTextArea_Helpers } from "@plasmicpkgs/antd5/skinny/registerInput";
 import { AntdButton } from "@plasmicpkgs/antd5/skinny/registerButton";
+import { AntdSteps } from "@plasmicpkgs/antd5/skinny/registerSteps";
 
 import "@plasmicapp/react-web/lib/plasmic.css";
 
@@ -90,12 +86,14 @@ export const PlasmicFormulaire__ArgProps = new Array<ArgPropType>();
 export type PlasmicFormulaire__OverridesType = {
   formulaire?: Flex__<"div">;
   graphQlFetcher?: Flex__<typeof GraphqlFetcher>;
+  h4?: Flex__<"h4">;
   freeBox?: Flex__<"div">;
+  section?: Flex__<"section">;
+  h5?: Flex__<"h5">;
   form?: Flex__<typeof FormWrapper>;
-  input?: Flex__<typeof AntdInput>;
-  textArea?: Flex__<typeof AntdTextArea>;
   button?: Flex__<typeof AntdButton>;
   text?: Flex__<"div">;
+  steps?: Flex__<typeof AntdSteps>;
 };
 
 export interface DefaultFormulaireProps {}
@@ -146,6 +144,31 @@ function PlasmicFormulaire__RenderFunc(props: {
 
         refName: "form",
         onMutate: generateOnMutateForSpec("isSubmitting", FormWrapper_Helpers)
+      },
+      {
+        path: "step",
+        type: "private",
+        variableType: "number",
+        initFunc: ({ $props, $state, $queries, $ctx }) => 0
+      },
+      {
+        path: "steps.current",
+        type: "private",
+        variableType: "number",
+        initFunc: ({ $props, $state, $queries, $ctx }) =>
+          (() => {
+            try {
+              return $state.step;
+            } catch (e) {
+              if (
+                e instanceof TypeError ||
+                e?.plasmicType === "PlasmicUndefinedDataError"
+              ) {
+                return 1;
+              }
+              throw e;
+            }
+          })()
       }
     ],
     [$props, $ctx, $refs]
@@ -205,164 +228,350 @@ function PlasmicFormulaire__RenderFunc(props: {
             query={{
               query:
                 "query Query($filters: FormFilters) {\n  form(filters: $filters) {\n    steps\n    title\n    description\n    requestType\n    reference\n  }\n}\n",
-              variables: { filters: { formSlug: "formulaire-3-etapes" } }
+              variables: { filters: { formSlug: "documentation-request" } }
             }}
             url={"https://graphql.integration.pointfranchise.co.uk/"}
             varOverrides={{}}
           >
             <DataCtxReader__>
-              {$ctx =>
-                (_par => (!_par ? [] : Array.isArray(_par) ? _par : [_par]))(
-                  (() => {
+              {$ctx => (
+                <React.Fragment>
+                  <h4
+                    data-plasmic-name={"h4"}
+                    data-plasmic-override={overrides.h4}
+                    className={classNames(
+                      projectcss.all,
+                      projectcss.h4,
+                      projectcss.__wab_text,
+                      sty.h4
+                    )}
+                  >
+                    <React.Fragment>
+                      {(() => {
+                        try {
+                          return $ctx.fetchedData.data.form.title;
+                        } catch (e) {
+                          if (
+                            e instanceof TypeError ||
+                            e?.plasmicType === "PlasmicUndefinedDataError"
+                          ) {
+                            return "";
+                          }
+                          throw e;
+                        }
+                      })()}
+                    </React.Fragment>
+                  </h4>
+                  <p
+                    className={classNames(
+                      projectcss.all,
+                      projectcss.p,
+                      projectcss.__wab_text,
+                      sty.p__jYgYg
+                    )}
+                  >
+                    <React.Fragment>
+                      {(() => {
+                        try {
+                          return $ctx.fetchedData.data.form.description;
+                        } catch (e) {
+                          if (
+                            e instanceof TypeError ||
+                            e?.plasmicType === "PlasmicUndefinedDataError"
+                          ) {
+                            return "";
+                          }
+                          throw e;
+                        }
+                      })()}
+                    </React.Fragment>
+                  </p>
+                  {(() => {
                     try {
-                      return $ctx.fetchedData.data.form.steps;
+                      return true;
                     } catch (e) {
                       if (
                         e instanceof TypeError ||
                         e?.plasmicType === "PlasmicUndefinedDataError"
                       ) {
-                        return [];
+                        return true;
                       }
                       throw e;
                     }
                   })()
-                ).map((__plasmic_item_0, __plasmic_idx_0) => {
-                  const currentItem = __plasmic_item_0;
-                  const currentIndex = __plasmic_idx_0;
-                  return (
-                    <div
-                      data-plasmic-name={"freeBox"}
-                      data-plasmic-override={overrides.freeBox}
-                      className={classNames(projectcss.all, sty.freeBox)}
-                      key={currentIndex}
-                    >
-                      {(() => {
-                        const child$Props = {
-                          className: classNames("__wab_instance", sty.form),
-                          extendedOnValuesChange:
-                            generateStateOnChangePropForCodeComponents(
-                              $state,
-                              "value",
-                              ["form", __plasmic_idx_0, "value"],
-                              FormWrapper_Helpers
-                            ),
-                          formItems: undefined,
-                          labelCol: { span: 8, horizontalOnly: true },
-                          layout: "vertical",
-                          mode: undefined,
-                          onFinish: async values => {
-                            const $steps = {};
-
-                            $steps["runCode"] = true
-                              ? (() => {
-                                  const actionArgs = {
-                                    customFunction: async () => {
-                                      return undefined;
-                                    }
-                                  };
-                                  return (({ customFunction }) => {
-                                    return customFunction();
-                                  })?.apply(null, [actionArgs]);
-                                })()
-                              : undefined;
+                    ? (_par =>
+                        !_par ? [] : Array.isArray(_par) ? _par : [_par])(
+                        (() => {
+                          try {
+                            return $ctx.fetchedData.data.form.steps;
+                          } catch (e) {
                             if (
-                              $steps["runCode"] != null &&
-                              typeof $steps["runCode"] === "object" &&
-                              typeof $steps["runCode"].then === "function"
+                              e instanceof TypeError ||
+                              e?.plasmicType === "PlasmicUndefinedDataError"
                             ) {
-                              $steps["runCode"] = await $steps["runCode"];
+                              return [];
                             }
-                          },
-                          onIsSubmittingChange:
-                            generateStateOnChangePropForCodeComponents(
-                              $state,
-                              "isSubmitting",
-                              ["form", __plasmic_idx_0, "isSubmitting"],
-                              FormWrapper_Helpers
-                            ),
-                          ref: ref => {
-                            $refs["form"] = ref;
-                          },
-                          wrapperCol: { span: 16, horizontalOnly: true }
-                        };
-                        initializeCodeComponentStates(
-                          $state,
-                          [
-                            {
-                              name: "value",
-                              plasmicStateName: "form[].value"
-                            },
-                            {
-                              name: "isSubmitting",
-                              plasmicStateName: "form[].isSubmitting"
-                            }
-                          ],
-                          [__plasmic_idx_0],
-                          FormWrapper_Helpers ?? {},
-                          child$Props
-                        );
-
+                            throw e;
+                          }
+                        })()
+                      ).map((__plasmic_item_0, __plasmic_idx_0) => {
+                        const currentItem = __plasmic_item_0;
+                        const currentIndex = __plasmic_idx_0;
                         return (
-                          <FormWrapper
-                            data-plasmic-name={"form"}
-                            data-plasmic-override={overrides.form}
-                            {...child$Props}
+                          <div
+                            data-plasmic-name={"freeBox"}
+                            data-plasmic-override={overrides.freeBox}
+                            className={classNames(projectcss.all, sty.freeBox)}
+                            key={currentIndex}
                           >
-                            <FormItemWrapper
-                              className={classNames(
-                                "__wab_instance",
-                                sty.formField__n8LP
-                              )}
-                              label={"Name"}
-                              name={"name"}
-                            >
-                              <AntdInput
-                                className={classNames(
-                                  "__wab_instance",
-                                  sty.input
-                                )}
-                              />
-                            </FormItemWrapper>
-                            <FormItemWrapper
-                              className={classNames(
-                                "__wab_instance",
-                                sty.formField__g0HcZ
-                              )}
-                              label={"Message"}
-                              name={"message"}
-                            >
-                              <AntdTextArea
-                                className={classNames(
-                                  "__wab_instance",
-                                  sty.textArea
-                                )}
-                              />
-                            </FormItemWrapper>
-                            <AntdButton
-                              className={classNames(
-                                "__wab_instance",
-                                sty.button
-                              )}
-                              submitsForm={true}
-                              type={"primary"}
-                            >
-                              <div
+                            {(() => {
+                              try {
+                                return (
+                                  currentItem.id == "step" + ($state.step + 1)
+                                );
+                              } catch (e) {
+                                if (
+                                  e instanceof TypeError ||
+                                  e?.plasmicType === "PlasmicUndefinedDataError"
+                                ) {
+                                  return true;
+                                }
+                                throw e;
+                              }
+                            })() ? (
+                              <section
+                                data-plasmic-name={"section"}
+                                data-plasmic-override={overrides.section}
                                 className={classNames(
                                   projectcss.all,
-                                  projectcss.__wab_text,
-                                  sty.text
+                                  sty.section
                                 )}
                               >
-                                {"Submit"}
-                              </div>
-                            </AntdButton>
-                          </FormWrapper>
+                                <h5
+                                  data-plasmic-name={"h5"}
+                                  data-plasmic-override={overrides.h5}
+                                  className={classNames(
+                                    projectcss.all,
+                                    projectcss.h5,
+                                    projectcss.__wab_text,
+                                    sty.h5
+                                  )}
+                                >
+                                  <React.Fragment>
+                                    {(() => {
+                                      try {
+                                        return currentItem.title;
+                                      } catch (e) {
+                                        if (
+                                          e instanceof TypeError ||
+                                          e?.plasmicType ===
+                                            "PlasmicUndefinedDataError"
+                                        ) {
+                                          return "";
+                                        }
+                                        throw e;
+                                      }
+                                    })()}
+                                  </React.Fragment>
+                                </h5>
+                                <p
+                                  className={classNames(
+                                    projectcss.all,
+                                    projectcss.p,
+                                    projectcss.__wab_text,
+                                    sty.p__cmSy
+                                  )}
+                                >
+                                  <React.Fragment>
+                                    {(() => {
+                                      try {
+                                        return currentItem.subtitle;
+                                      } catch (e) {
+                                        if (
+                                          e instanceof TypeError ||
+                                          e?.plasmicType ===
+                                            "PlasmicUndefinedDataError"
+                                        ) {
+                                          return "";
+                                        }
+                                        throw e;
+                                      }
+                                    })()}
+                                  </React.Fragment>
+                                </p>
+                                {(() => {
+                                  const child$Props = {
+                                    className: classNames(
+                                      "__wab_instance",
+                                      sty.form
+                                    ),
+                                    extendedOnValuesChange:
+                                      generateStateOnChangePropForCodeComponents(
+                                        $state,
+                                        "value",
+                                        ["form", __plasmic_idx_0, "value"],
+                                        FormWrapper_Helpers
+                                      ),
+                                    formItems: undefined,
+                                    labelCol: { span: 8, horizontalOnly: true },
+                                    layout: "vertical",
+                                    mode: undefined,
+                                    onFinish: async values => {
+                                      const $steps = {};
+
+                                      $steps["runCode"] = true
+                                        ? (() => {
+                                            const actionArgs = {
+                                              customFunction: async () => {
+                                                return (() => {
+                                                  if (
+                                                    $state.step <
+                                                    $ctx.fetchedData.data.form
+                                                      .steps.length -
+                                                      1
+                                                  ) {
+                                                    return $state.step++;
+                                                  }
+                                                })();
+                                              }
+                                            };
+                                            return (({ customFunction }) => {
+                                              return customFunction();
+                                            })?.apply(null, [actionArgs]);
+                                          })()
+                                        : undefined;
+                                      if (
+                                        $steps["runCode"] != null &&
+                                        typeof $steps["runCode"] === "object" &&
+                                        typeof $steps["runCode"].then ===
+                                          "function"
+                                      ) {
+                                        $steps["runCode"] = await $steps[
+                                          "runCode"
+                                        ];
+                                      }
+                                    },
+                                    onIsSubmittingChange:
+                                      generateStateOnChangePropForCodeComponents(
+                                        $state,
+                                        "isSubmitting",
+                                        [
+                                          "form",
+                                          __plasmic_idx_0,
+                                          "isSubmitting"
+                                        ],
+                                        FormWrapper_Helpers
+                                      ),
+                                    ref: ref => {
+                                      $refs["form"] = ref;
+                                    },
+                                    wrapperCol: {
+                                      span: 16,
+                                      horizontalOnly: true
+                                    }
+                                  };
+                                  initializeCodeComponentStates(
+                                    $state,
+                                    [
+                                      {
+                                        name: "value",
+                                        plasmicStateName: "form[].value"
+                                      },
+                                      {
+                                        name: "isSubmitting",
+                                        plasmicStateName: "form[].isSubmitting"
+                                      }
+                                    ],
+                                    [__plasmic_idx_0],
+                                    FormWrapper_Helpers ?? {},
+                                    child$Props
+                                  );
+
+                                  return (
+                                    <FormWrapper
+                                      data-plasmic-name={"form"}
+                                      data-plasmic-override={overrides.form}
+                                      {...child$Props}
+                                    >
+                                      <AntdButton
+                                        className={classNames(
+                                          "__wab_instance",
+                                          sty.button
+                                        )}
+                                        submitsForm={true}
+                                        type={"primary"}
+                                      >
+                                        <div
+                                          className={classNames(
+                                            projectcss.all,
+                                            projectcss.__wab_text,
+                                            sty.text
+                                          )}
+                                        >
+                                          <React.Fragment>
+                                            {(() => {
+                                              try {
+                                                return $state.step <
+                                                  $ctx.fetchedData.data.form
+                                                    .steps.length -
+                                                    1
+                                                  ? "Suivant"
+                                                  : "Envoyer";
+                                              } catch (e) {
+                                                if (
+                                                  e instanceof TypeError ||
+                                                  e?.plasmicType ===
+                                                    "PlasmicUndefinedDataError"
+                                                ) {
+                                                  return "Submit";
+                                                }
+                                                throw e;
+                                              }
+                                            })()}
+                                          </React.Fragment>
+                                        </div>
+                                      </AntdButton>
+                                    </FormWrapper>
+                                  );
+                                })()}
+                              </section>
+                            ) : null}
+                          </div>
                         );
-                      })()}
-                    </div>
-                  );
-                })
-              }
+                      })
+                    : null}
+                  <AntdSteps
+                    data-plasmic-name={"steps"}
+                    data-plasmic-override={overrides.steps}
+                    className={classNames("__wab_instance", sty.steps)}
+                    current={generateStateValueProp($state, [
+                      "steps",
+                      "current"
+                    ])}
+                    direction={"horizontal"}
+                    items={(() => {
+                      try {
+                        return $ctx.fetchedData.data.form.steps;
+                      } catch (e) {
+                        if (
+                          e instanceof TypeError ||
+                          e?.plasmicType === "PlasmicUndefinedDataError"
+                        ) {
+                          return [];
+                        }
+                        throw e;
+                      }
+                    })()}
+                    onChange={generateStateOnChangeProp($state, [
+                      "steps",
+                      "current"
+                    ])}
+                    progressDot={true}
+                    size={"small"}
+                    type={"default"}
+                  />
+                </React.Fragment>
+              )}
             </DataCtxReader__>
           </GraphqlFetcher>
         </div>
@@ -375,28 +584,34 @@ const PlasmicDescendants = {
   formulaire: [
     "formulaire",
     "graphQlFetcher",
+    "h4",
     "freeBox",
+    "section",
+    "h5",
     "form",
-    "input",
-    "textArea",
     "button",
-    "text"
+    "text",
+    "steps"
   ],
   graphQlFetcher: [
     "graphQlFetcher",
+    "h4",
     "freeBox",
+    "section",
+    "h5",
     "form",
-    "input",
-    "textArea",
     "button",
-    "text"
+    "text",
+    "steps"
   ],
-  freeBox: ["freeBox", "form", "input", "textArea", "button", "text"],
-  form: ["form", "input", "textArea", "button", "text"],
-  input: ["input"],
-  textArea: ["textArea"],
+  h4: ["h4"],
+  freeBox: ["freeBox", "section", "h5", "form", "button", "text"],
+  section: ["section", "h5", "form", "button", "text"],
+  h5: ["h5"],
+  form: ["form", "button", "text"],
   button: ["button", "text"],
-  text: ["text"]
+  text: ["text"],
+  steps: ["steps"]
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -404,12 +619,14 @@ type DescendantsType<T extends NodeNameType> =
 type NodeDefaultElementType = {
   formulaire: "div";
   graphQlFetcher: typeof GraphqlFetcher;
+  h4: "h4";
   freeBox: "div";
+  section: "section";
+  h5: "h5";
   form: typeof FormWrapper;
-  input: typeof AntdInput;
-  textArea: typeof AntdTextArea;
   button: typeof AntdButton;
   text: "div";
+  steps: typeof AntdSteps;
 };
 
 type ReservedPropsType = "variants" | "args" | "overrides";
@@ -473,12 +690,14 @@ export const PlasmicFormulaire = Object.assign(
   {
     // Helper components rendering sub-elements
     graphQlFetcher: makeNodeComponent("graphQlFetcher"),
+    h4: makeNodeComponent("h4"),
     freeBox: makeNodeComponent("freeBox"),
+    section: makeNodeComponent("section"),
+    h5: makeNodeComponent("h5"),
     form: makeNodeComponent("form"),
-    input: makeNodeComponent("input"),
-    textArea: makeNodeComponent("textArea"),
     button: makeNodeComponent("button"),
     text: makeNodeComponent("text"),
+    steps: makeNodeComponent("steps"),
 
     // Metadata about props expected for PlasmicFormulaire
     internalVariantProps: PlasmicFormulaire__VariantProps,
