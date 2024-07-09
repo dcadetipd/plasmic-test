@@ -687,6 +687,20 @@
           "cssFilePath": "plasmic/test_tlf/PlasmicLinkPreview.module.css",
           "scheme": "blackbox",
           "componentType": "component"
+        },
+        {
+          "id": "eKRmtrDhrNPy",
+          "name": "Formulaire",
+          "type": "managed",
+          "projectId": "4PWWUGdEeWDFKNqeFuFdzP",
+          "renderModuleFilePath": "plasmic/test_tlf/PlasmicFormulaire.tsx",
+          "importSpec": {
+            "modulePath": "../pages/formulaire.tsx"
+          },
+          "cssFilePath": "plasmic/test_tlf/PlasmicFormulaire.module.css",
+          "scheme": "blackbox",
+          "componentType": "page",
+          "path": "/formulaire"
         }
       ],
       "icons": [
@@ -762,7 +776,8 @@
           "componentImportPath": "@plasmicpkgs/plasmic-link-preview"
         }
       ],
-      "customFunctions": []
+      "customFunctions": [],
+      "jsBundleThemes": []
     },
     {
       "projectId": "YUiM7yqBWAqsh8KSnrdj7",
@@ -790,7 +805,8 @@
           "componentImportPath": "@plasmicpkgs/plasmic-query"
         }
       ],
-      "customFunctions": []
+      "customFunctions": [],
+      "jsBundleThemes": []
     }
   ],
   "globalVariants": {

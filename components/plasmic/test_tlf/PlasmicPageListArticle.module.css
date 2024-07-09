@@ -204,3 +204,10 @@
   max-width: 100%;
   position: relative;
 }
+.graphQlFetcher:global(.__wab_instance) {
+  width: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  position: relative;
+  min-width: 0;
+}

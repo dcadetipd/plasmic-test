@@ -98,6 +98,7 @@ export type PlasmicPageListArticle__OverridesType = {
   radioGroup?: Flex__<typeof AntdRadioGroup>;
   radio?: Flex__<typeof AntdRadio>;
   footerTlf?: Flex__<typeof FooterTlf>;
+  graphQlFetcher?: Flex__<typeof GraphqlFetcher>;
 };
 
 export interface DefaultPageListArticleProps {}
@@ -661,6 +662,33 @@ function PlasmicPageListArticle__RenderFunc(props: {
             data-plasmic-override={overrides.footerTlf}
             className={classNames("__wab_instance", sty.footerTlf)}
           />
+
+          <GraphqlFetcher
+            data-plasmic-name={"graphQlFetcher"}
+            data-plasmic-override={overrides.graphQlFetcher}
+            className={classNames("__wab_instance", sty.graphQlFetcher)}
+            dataName={"fetchedData"}
+            errorDisplay={
+              <DataCtxReader__>{$ctx => "Error fetching data"}</DataCtxReader__>
+            }
+            errorName={"fetchError"}
+            headers={{
+              "Content-Type": "application/json",
+              Accept: "application/json"
+            }}
+            loadingDisplay={
+              <DataCtxReader__>{$ctx => "Loading..."}</DataCtxReader__>
+            }
+            method={"POST"}
+            noLayout={false}
+            query={{
+              query:
+                "query MyQuery($slug: String) {\n  edito(slug: $slug) {\n    slug\n    title\n  }\n}\n",
+              variables: {}
+            }}
+            url={"https://graphql.integration.toute-la-franchise.com/"}
+            varOverrides={{ slug: "$ctx.params.slug" }}
+          />
         </div>
       </div>
     </React.Fragment>
@@ -679,7 +707,8 @@ const PlasmicDescendants = {
     "h4",
     "radioGroup",
     "radio",
-    "footerTlf"
+    "footerTlf",
+    "graphQlFetcher"
   ],
   headerTlf: ["headerTlf"],
   articles: ["articles"],
@@ -690,7 +719,8 @@ const PlasmicDescendants = {
   h4: ["h4"],
   radioGroup: ["radioGroup", "radio"],
   radio: ["radio"],
-  footerTlf: ["footerTlf"]
+  footerTlf: ["footerTlf"],
+  graphQlFetcher: ["graphQlFetcher"]
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -707,6 +737,7 @@ type NodeDefaultElementType = {
   radioGroup: typeof AntdRadioGroup;
   radio: typeof AntdRadio;
   footerTlf: typeof FooterTlf;
+  graphQlFetcher: typeof GraphqlFetcher;
 };
 
 type ReservedPropsType = "variants" | "args" | "overrides";
@@ -779,6 +810,7 @@ export const PlasmicPageListArticle = Object.assign(
     radioGroup: makeNodeComponent("radioGroup"),
     radio: makeNodeComponent("radio"),
     footerTlf: makeNodeComponent("footerTlf"),
+    graphQlFetcher: makeNodeComponent("graphQlFetcher"),
 
     // Metadata about props expected for PlasmicPageListArticle
     internalVariantProps: PlasmicPageListArticle__VariantProps,
