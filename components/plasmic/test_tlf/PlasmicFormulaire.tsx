@@ -88,7 +88,7 @@ type ArgPropType = keyof PlasmicFormulaire__ArgsType;
 export const PlasmicFormulaire__ArgProps = new Array<ArgPropType>();
 
 export type PlasmicFormulaire__OverridesType = {
-  root?: Flex__<"div">;
+  formulaire?: Flex__<"div">;
   graphQlFetcher?: Flex__<typeof GraphqlFetcher>;
   freeBox?: Flex__<"div">;
   form?: Flex__<typeof FormWrapper>;
@@ -169,8 +169,8 @@ function PlasmicFormulaire__RenderFunc(props: {
 
       <div className={projectcss.plasmic_page_wrapper}>
         <div
-          data-plasmic-name={"root"}
-          data-plasmic-override={overrides.root}
+          data-plasmic-name={"formulaire"}
+          data-plasmic-override={overrides.formulaire}
           data-plasmic-root={true}
           data-plasmic-for-node={forNode}
           className={classNames(
@@ -181,7 +181,7 @@ function PlasmicFormulaire__RenderFunc(props: {
             projectcss.plasmic_tokens,
             plasmic_antd_5_hostless_css.plasmic_tokens,
             plasmic_plasmic_rich_components_css.plasmic_tokens,
-            sty.root
+            sty.formulaire
           )}
         >
           <GraphqlFetcher
@@ -311,7 +311,7 @@ function PlasmicFormulaire__RenderFunc(props: {
                             <FormItemWrapper
                               className={classNames(
                                 "__wab_instance",
-                                sty.formField__u8I17
+                                sty.formField__n8LP
                               )}
                               label={"Name"}
                               name={"name"}
@@ -326,7 +326,7 @@ function PlasmicFormulaire__RenderFunc(props: {
                             <FormItemWrapper
                               className={classNames(
                                 "__wab_instance",
-                                sty.formField__abpz4
+                                sty.formField__g0HcZ
                               )}
                               label={"Message"}
                               name={"message"}
@@ -372,8 +372,8 @@ function PlasmicFormulaire__RenderFunc(props: {
 }
 
 const PlasmicDescendants = {
-  root: [
-    "root",
+  formulaire: [
+    "formulaire",
     "graphQlFetcher",
     "freeBox",
     "form",
@@ -402,7 +402,7 @@ type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
   (typeof PlasmicDescendants)[T][number];
 type NodeDefaultElementType = {
-  root: "div";
+  formulaire: "div";
   graphQlFetcher: typeof GraphqlFetcher;
   freeBox: "div";
   form: typeof FormWrapper;
@@ -459,7 +459,7 @@ function makeNodeComponent<NodeName extends NodeNameType>(nodeName: NodeName) {
       forNode: nodeName
     });
   };
-  if (nodeName === "root") {
+  if (nodeName === "formulaire") {
     func.displayName = "PlasmicFormulaire";
   } else {
     func.displayName = `PlasmicFormulaire.${nodeName}`;
@@ -469,7 +469,7 @@ function makeNodeComponent<NodeName extends NodeNameType>(nodeName: NodeName) {
 
 export const PlasmicFormulaire = Object.assign(
   // Top-level PlasmicFormulaire renders the root element
-  makeNodeComponent("root"),
+  makeNodeComponent("formulaire"),
   {
     // Helper components rendering sub-elements
     graphQlFetcher: makeNodeComponent("graphQlFetcher"),
